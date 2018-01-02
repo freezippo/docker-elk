@@ -3,7 +3,7 @@
 [![Elastic Stack version](https://img.shields.io/badge/ELK-6.1.0-blue.svg?style=flat)](https://github.com/deviantony/docker-elk/issues/212)
 [![Build Status](https://api.travis-ci.org/freezippo/docker-elk.svg?branch=master)](https://travis-ci.org/freezippo/docker-elk)
 
-Run the latest version of the ELK (Elasticsearch, Logstash, Kibana) stack with Docker and Docker Compose.
+Run the latest version of the ELK (Elasticsearch, Logstash, Kibana) + XPack extension stack with Docker and Docker Compose.
 
 It will give you the ability to analyze any data set by using the searching/aggregation capabilities of Elasticsearch
 and the visualization power of Kibana.
@@ -13,12 +13,6 @@ Based on the official Docker images:
 * [elasticsearch](https://github.com/elastic/elasticsearch-docker)
 * [logstash](https://github.com/elastic/logstash-docker)
 * [kibana](https://github.com/elastic/kibana-docker)
-
-**Note**: Other branches in this project are available:
-
-* ELK 6 with X-Pack support: https://github.com/deviantony/docker-elk/tree/x-pack
-* ELK 6 in Vagrant: https://github.com/deviantony/docker-elk/tree/vagrant
-* ELK 6 with Search Guard: https://github.com/deviantony/docker-elk/tree/searchguard
 
 ## Contents
 
@@ -77,13 +71,13 @@ $ docker-compose up -d
 ```
 
 Give Kibana a few seconds to initialize, then access the Kibana web UI by hitting
-[http://localhost:5601](http://localhost:5601) with a web browser.
+[http://localhost:11004](http://localhost:11004) with a web browser.
 
 By default, the stack exposes the following ports:
-* 5000: Logstash TCP input.
-* 9200: Elasticsearch HTTP
-* 9300: Elasticsearch TCP transport
-* 5601: Kibana
+* 11003: Logstash TCP input.
+* 11001: Elasticsearch HTTP
+* 11002: Elasticsearch TCP transport
+* 11004: Kibana
 
 **WARNING**: If you're using `boot2docker`, you must access it via the `boot2docker` IP address instead of `localhost`.
 
@@ -94,7 +88,7 @@ Now that the stack is running, you will want to inject some log entries. The shi
 to send content via TCP:
 
 ```console
-$ nc localhost 5000 < /path/to/logfile.log
+$ nc localhost 11003 < /path/to/logfile.log
 ```
 
 ## Initial setup
@@ -117,7 +111,7 @@ about the index pattern configuration.
 Run this command to create a Kibana index pattern:
 
 ```console
-$ curl -XPUT -D- 'http://localhost:9200/.kibana/doc/index-pattern:docker-elk' \
+$ curl -XPUT -D- 'http://localhost:11001/.kibana/doc/index-pattern:docker-elk' \
     -H 'Content-Type: application/json' \
     -d '{"type": "index-pattern", "index-pattern": {"title": "logstash-*", "timeFieldName": "@timestamp"}}'
 ```
